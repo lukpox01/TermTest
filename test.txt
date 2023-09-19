@@ -1,0 +1,7 @@
+@title:Python
+@autor:lukas
+@time 10
+# What is str?
+> datatype string +
+> bullshit
+> mobile

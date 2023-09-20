@@ -1,8 +1,9 @@
 # from curses import wrapper
 import curses
-from utils import Menu, Site
-from sites import LOGIN, SIGNUP
 import sys
+
+from sites import LOGIN, SIGNUP
+from utils import Menu, Site
 
 
 class MainPage(Site):

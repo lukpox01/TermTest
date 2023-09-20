@@ -1,6 +1,8 @@
-from utils import Test, Question
 import sys
+
 import dill
+
+from utils import Test, Question
 
 
 def txt_check(val, max_length, min_length, type_, line_num):

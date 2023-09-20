@@ -1,6 +1,7 @@
 import curses
 import sys
 from curses.textpad import rectangle
+
 from utils import Site, to_str, isvalidEmail
 from utils.database import Database
 

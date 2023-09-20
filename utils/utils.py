@@ -1,5 +1,4 @@
 import curses
-import os
 import re
 
 logo = [

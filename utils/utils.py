@@ -15,6 +15,16 @@ logo = [
 ]
 
 
+login_logo = [
+    "██╗      ██████╗  ██████╗ ██╗███╗   ██╗",
+    "██║     ██╔═══██╗██╔════╝ ██║████╗  ██║",
+    "██║     ██║   ██║██║  ███╗██║██╔██╗ ██║",
+    "██║     ██║   ██║██║   ██║██║██║╚██╗██║",
+    "███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║",
+    "╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝",
+]
+
+
 class Menu:
     def __init__(self, menu_options, stdscr, last_option):
         self.menu_options = menu_options
@@ -113,7 +123,7 @@ class Site:
         curses.noecho()
         curses.cbreak()
         self.stdscr.keypad(True)
-        self.stdscr.box()
+        self.border()
         self.Y, self.X = self.stdscr.getmaxyx()
 
     def end_app(self):
@@ -122,9 +132,16 @@ class Site:
         curses.echo()
         curses.endwin()
 
-    def show_logo(self):
-        for i, line in enumerate(logo):
-            self.stdscr.addstr(i + 2, self.X // 2 - len(line) // 2, line)
+    def border(self):
+        self.stdscr.box()
+
+    def show_logo(self, type_=None):
+        if type_ is None:
+            for i, line in enumerate(logo):
+                self.stdscr.addstr(i + 2, self.X // 2 - len(line) // 2, line)
+        elif type_ == "login":
+            for i, line in enumerate(login_logo):
+                self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
 
 
 def to_str(s: str) -> str:

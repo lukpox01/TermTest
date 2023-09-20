@@ -17,12 +17,10 @@ class MainPage(Site):
 
         menu = Menu([("LOGIN", 1), ("SIGNUP", 2)], self.stdscr, "EXIT")
         auth = menu.display()
-        print(auth)
         self.end_app()
 
         if auth[1] == 1:  # LOGIN
             login = LOGIN()
-            print("Login")
             info = login.get_info()
         elif auth[1] == 2:  # SIGNUP
             signup = SIGNUP()

@@ -3,15 +3,15 @@ import os
 import re
 
 logo = [
-    "▄▄▄█████▓ ▓█████ ██▀███  ▄▄▄█████▓ ▓█████  ██████ ▄▄▄█████▓",
-    "▓  ██▒ ▓▒ ▓█   ▀▓██ ▒ ██▒▓  ██▒ ▓▒ ▓█   ▀▒██    ▒ ▓  ██▒ ▓▒",
-    "▒ ▓██░ ▒░ ▒███  ▓██ ░▄█ ▒▒ ▓██░ ▒░ ▒███  ░ ▓██▄   ▒ ▓██░ ▒░",
-    "░ ▓██▓ ░  ▒▓█  ▄▒██▀▀█▄  ░ ▓██▓ ░  ▒▓█  ▄  ▒   ██▒░ ▓██▓ ░ ",
-    "  ▒██▒ ░ ▒░▒████░██▓ ▒██▒  ▒██▒ ░ ▒░▒████▒██████▒▒  ▒██▒ ░ ",
-    "  ▒ ░░   ░░░ ▒░ ░ ▒▓ ░▒▓░  ▒ ░░   ░░░ ▒░ ▒ ▒▓▒ ▒ ░  ▒ ░░   ",
-    "    ░    ░ ░ ░    ░▒ ░ ▒     ░    ░ ░ ░  ░ ░▒  ░ ░    ░    ",
-    "  ░ ░        ░    ░░   ░   ░ ░        ░  ░  ░  ░    ░      ",
-    "         ░   ░     ░              ░   ░        ░           "
+    "▄▄▄█████▓  ▓█████  ██▀███    ███▄ ▄███▓ ▄▄▄█████▓  ▓█████   ██████  ▄▄▄█████▓",
+    "▓  ██▒ ▓▒  ▓█   ▀ ▓██ ▒ ██▒ ▓██▒▀█▀ ██▒ ▓  ██▒ ▓▒  ▓█   ▀▒ ██    ▒  ▓  ██▒ ▓▒",
+    "▒ ▓██░ ▒░  ▒███   ▓██ ░▄█ ▒ ▓██    ▓██░ ▒ ▓██░ ▒░  ▒███  ░  ▓██▄    ▒ ▓██░ ▒░",
+    "░ ▓██▓ ░   ▒▓█  ▄ ▒██▀▀█▄   ▒██    ▒██  ░ ▓██▓ ░   ▒▓█  ▄   ▒   ██▒ ░ ▓██▓ ░ ",
+    "  ▒██▒ ░  ▒░▒████ ░██▓ ▒██▒ ▒██▒   ░██▒   ▒██▒ ░  ▒░▒████▒ ██████▒▒   ▒██▒ ░ ",
+    "  ▒ ░░    ░░░ ▒░  ░ ▒▓ ░▒▓░ ░ ▒░   ░  ░   ▒ ░░    ░░░ ▒░ ▒  ▒▓▒ ▒ ░   ▒ ░░   ",
+    "    ░     ░ ░ ░     ░▒ ░ ▒  ░  ░      ░     ░     ░ ░ ░  ░  ░▒  ░ ░     ░    ",
+    "  ░ ░         ░     ░░   ░  ░      ░      ░ ░         ░  ░   ░  ░     ░      ",
+    "          ░   ░      ░             ░              ░   ░         ░            ",
 ]
 
 
@@ -34,7 +34,6 @@ class Menu:
         self.normal_color = curses.A_NORMAL
 
     def prompt_select(self):
-
         option_count = len(self.menu_options)
         longest_option = len(max(self.menu_options, key=len))
         input_key = None
@@ -95,10 +94,8 @@ class Menu:
         self.stdscr.addstr(
             20 + option_number,
             max_x // 2 - (longest_option + 5) // 2,
-            "{:2} - {}".format(
-                option_number + 1, self.menu_options[option_number][0]
-            ),
-            style
+            "{:2} - {}".format(option_number + 1, self.menu_options[option_number][0]),
+            style,
         )
 
     def display(self):
@@ -129,8 +126,10 @@ class Site:
         for i, line in enumerate(logo):
             self.stdscr.addstr(i + 2, self.X // 2 - len(line) // 2, line)
 
+
 def to_str(s: str) -> str:
     return str(s)[2:-1]
+
 
 def isvalidEmail(email: str) -> bool:
     pattern = "^\S+@\S+\.\S+$"

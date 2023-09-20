@@ -20,11 +20,11 @@ class MainPage(Site):
         print(auth)
         self.end_app()
 
-        if auth[1] == 1: #LOGIN
+        if auth[1] == 1:  # LOGIN
             login = LOGIN()
             print("Login")
             info = login.get_info()
-        elif auth[1] == 2: #SIGNUP
+        elif auth[1] == 2:  # SIGNUP
             signup = SIGNUP()
             info = signup.get_info()
         else:

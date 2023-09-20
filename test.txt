@@ -1,7 +1,13 @@
-@title:Python
 @autor:lukas
-@time 10
+@title:Python
+@time:10
+
 # What is str?
 > datatype string +
 > bullshit
 > mobile
+
+# question
+> 25
+> 159 +
+> lol

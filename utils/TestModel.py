@@ -14,4 +14,3 @@ class Test:
     title: str
     questions: list[Question]
     time_to_complete: int  # minutes
-

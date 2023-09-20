@@ -1,0 +1,14 @@
+@autor:<autor>
+@title:<title>
+@time:<time in minutes>
+
+# <question1>
+> <option1 for question1> <'+' for correct answer>
+> <option2 for question1>
+> <option3 for question1>
+
+# <question2>
+> <option1 for question2> <'+' for correct answer>
+> <option2 for question2>
+> <option3 for question2>
+

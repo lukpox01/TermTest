@@ -4,6 +4,7 @@ from curses.textpad import rectangle
 from utils import Site, to_str, isvalidEmail
 from utils.database import Database
 
+
 class LOGIN(Site):
     def __init__(self):
         super().__init__()
@@ -18,7 +19,9 @@ class LOGIN(Site):
         while True:
             self.stdscr.clear()
 
-            self.stdscr.addstr(0, curses.COLS - len(msg) - 1, msg)  # TODO make it in center
+            self.stdscr.addstr(
+                0, curses.COLS - len(msg) - 1, msg
+            )  # TODO make it in center
             self.stdscr.addstr(1, 1, "Name     : ")
             self.stdscr.addstr(4, 1, "Email    : ")
             self.stdscr.addstr(7, 1, "Password : ")
@@ -74,7 +77,9 @@ class SIGNUP(Site):
         while True:
             self.stdscr.clear()
 
-            self.stdscr.addstr(0, curses.COLS - len(msg) - 1, msg)  # TODO make it in center
+            self.stdscr.addstr(
+                0, curses.COLS - len(msg) - 1, msg
+            )  # TODO make it in center
             self.stdscr.addstr(1, 1, "Name     : ")
             self.stdscr.addstr(4, 1, "Email    : ")
             self.stdscr.addstr(7, 1, "Password : ")

@@ -23,6 +23,15 @@ login_logo = [
     "╚══════╝ ╚═════╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝",
 ]
 
+signup_logo = [
+    "███████╗██╗ ██████╗ ███╗   ██╗██╗   ██╗██████╗ ",
+    "██╔════╝██║██╔════╝ ████╗  ██║██║   ██║██╔══██╗",
+    "███████╗██║██║  ███╗██╔██╗ ██║██║   ██║██████╔╝",
+    "╚════██║██║██║   ██║██║╚██╗██║██║   ██║██╔═══╝ ",
+    "███████║██║╚██████╔╝██║ ╚████║╚██████╔╝██║     ",
+    "╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ",
+]
+
 
 class Menu:
     def __init__(self, menu_options, stdscr, last_option):
@@ -140,6 +149,9 @@ class Site:
                 self.stdscr.addstr(i + 2, self.X // 2 - len(line) // 2, line)
         elif type_ == "login":
             for i, line in enumerate(login_logo):
+                self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
+        elif type_ == "signup":
+            for i, line in enumerate(signup_logo):
                 self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
 
 

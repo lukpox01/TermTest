@@ -1,6 +1,7 @@
 @autor:lukas
 @title:Python
 @time:10
+@description:lol
 
 # What is str?
 > datatype string +

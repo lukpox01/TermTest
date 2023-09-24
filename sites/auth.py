@@ -5,6 +5,7 @@ from curses.textpad import rectangle
 from utils import Site, to_str, isvalidEmail
 from utils.database import Database
 
+
 # TODO: do a little cleanup with math
 class LOGIN(Site):
     def __init__(self):
@@ -78,11 +79,10 @@ class LOGIN(Site):
                     msg = "No user exists"
                     continue
             else:
-                print(key)
                 self.end_app()
                 sys.exit()
 
-            self.stdscr.refresh()
+            self.end_app()
             return name, password
 
     def buttons(self):
@@ -203,11 +203,10 @@ class SIGNUP(Site):
                     self.database.add_user(name, password, email)
 
             else:
-                print(key)
                 self.end_app()
                 sys.exit()
 
-            self.stdscr.refresh()
+            self.end_app()
             return name, email, password
 
     def buttons(self):

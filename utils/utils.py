@@ -1,4 +1,5 @@
 import curses
+import glob
 import re
 
 logo = [
@@ -31,6 +32,38 @@ signup_logo = [
     "███████║██║╚██████╔╝██║ ╚████║╚██████╔╝██║     ",
     "╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ",
 ]
+
+
+class Site:
+    def __init__(self):
+        self.stdscr = curses.initscr()
+        curses.noecho()
+        curses.cbreak()
+        self.stdscr.clear()
+        self.stdscr.keypad(True)
+        self.border()
+        curses.curs_set(0)
+        self.Y, self.X = self.stdscr.getmaxyx()
+
+    def end_app(self):
+        curses.nocbreak()
+        self.stdscr.keypad(False)
+        curses.echo()
+        curses.endwin()
+
+    def border(self):
+        self.stdscr.box()
+
+    def show_logo(self, type_=None):
+        if type_ is None:
+            for i, line in enumerate(logo):
+                self.stdscr.addstr(i + 2, self.X // 2 - len(line) // 2, line)
+        elif type_ == "login":
+            for i, line in enumerate(login_logo):
+                self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
+        elif type_ == "signup":
+            for i, line in enumerate(signup_logo):
+                self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
 
 
 class Menu:
@@ -125,36 +158,6 @@ class Menu:
             return self.last_option, 0
 
 
-class Site:
-    def __init__(self):
-        self.stdscr = curses.initscr()
-        curses.noecho()
-        curses.cbreak()
-        self.stdscr.keypad(True)
-        self.border()
-        self.Y, self.X = self.stdscr.getmaxyx()
-
-    def end_app(self):
-        curses.nocbreak()
-        self.stdscr.keypad(False)
-        curses.echo()
-        curses.endwin()
-
-    def border(self):
-        self.stdscr.box()
-
-    def show_logo(self, type_=None):
-        if type_ is None:
-            for i, line in enumerate(logo):
-                self.stdscr.addstr(i + 2, self.X // 2 - len(line) // 2, line)
-        elif type_ == "login":
-            for i, line in enumerate(login_logo):
-                self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
-        elif type_ == "signup":
-            for i, line in enumerate(signup_logo):
-                self.stdscr.addstr(i + 3, self.X // 2 - len(line) // 2, line)
-
-
 def to_str(s: str) -> str:
     return str(s)[2:-1]
 
@@ -167,3 +170,6 @@ def isvalidEmail(email: str) -> bool:
             return True
     except:
         return False
+
+
+find_all = lambda pattern, path: glob.glob(f"{path}/{pattern}", recursive=True)

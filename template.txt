@@ -1,6 +1,7 @@
 @autor:<autor>
 @title:<title>
 @time:<time in minutes>
+@description:<description optional>
 
 # <question1>
 > <option1 for question1> <'+' for correct answer>

@@ -14,10 +14,17 @@ def txt_check(val, max_length, min_length, type_, line_num):
         sys.exit(f"Too short {type_} on line {line_num} (>{min_length})")
 
 
+# TODO implement description
 def textfile(file):
     lines = file.readlines()
-    t = {"autor": None, "title": None, "questions": [], "time_to_complete": None}
-    q = {"question": None, "options": [], "correct": None}
+    t = {
+        "autor": None,
+        "title": None,
+        "questions": [],
+        "time_to_complete": None,
+        "description": "",
+    }
+    q = {"question": None, "options": [], "correct": None, "done": False}
     options_count = 0
     for index, line in enumerate(lines):
         if line.startswith("@autor"):
@@ -29,6 +36,11 @@ def textfile(file):
             title = line.split(":", 1)[1].strip()
             txt_check(title, 64, 3, "title", index + 1)
             t["title"] = title
+
+        elif line.startswith("@description"):
+            description = line.split(":", 1)[1].strip()
+            txt_check(description, 200, 0, "description", index + 1)
+            t["description"] = description
 
         elif line.startswith("@time"):
             time = line.split(":", 1)[1].split(" ")[0].strip()
@@ -43,8 +55,8 @@ def textfile(file):
             t["time_to_complete"] = time
         elif line.startswith("#"):
             if options_count != 0 and options_count != 1:
-                print(2)
                 t["questions"].append(Question(**q))
+                q = {"question": None, "options": [], "correct": None, "done": False}
             elif options_count > 5:
                 sys.exit(f"Too many options in {q['question']}")
             elif options_count != 0 and options_count <= 1:
@@ -77,7 +89,6 @@ def textfile(file):
         f"{file.name[:-4]}.ttf", "wb"  # [:-4] strip out the .txt extension
     ) as ttf:
         dill.dump(test, ttf)
-    print(test)
 
 
 def ttf(file):

@@ -172,4 +172,13 @@ def isvalidEmail(email: str) -> bool:
         return False
 
 
+def count_percents(list1, list2):
+    correct = 0
+    for i in range(len(list1)):
+        if list1[i] == list2[i]:
+            correct += 1
+
+    return 100 / len(list1) * correct
+
+
 find_all = lambda pattern, path: glob.glob(f"{path}/{pattern}", recursive=True)

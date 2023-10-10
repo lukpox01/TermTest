@@ -4,10 +4,14 @@ from curses.textpad import rectangle
 from utils import Site, Menu, count_percents
 
 
+# TODO math cleanup
+
+
 class Test(Site):
     def __init__(self):
         super().__init__()
         self.selected = {}
+        self.percents = None
 
     def show_bar(self, test):
         num_questions = len(test.questions)
@@ -21,6 +25,16 @@ class Test(Site):
             else:
                 bar += symbol + "\u2576"  # -
         self.stdscr.addstr(2, self.X // 2 - num_questions - 1, bar)
+
+
+class Reluslt(Test):
+    def __init__(self, test):
+        super().__init__()
+        self.border()
+        self.test = test
+
+    def show_results(self):
+        self.show_bar(self.test)
 
 
 class TEST(Test):
@@ -62,8 +76,8 @@ class TEST(Test):
                 correct_answers = [
                     self.test.questions[int(key)].correct for key in keys
                 ]
-                p = count_percents(correct_answers, sorted_answers)
-                self.stdscr.addstr(self.Y // 2, self.X // 2, f"{p}%")
+                self.percents = count_percents(correct_answers, sorted_answers)
+                result = Reluslt()
                 self.stdscr.getch()
 
     def manage_questions(self):
@@ -71,12 +85,14 @@ class TEST(Test):
         while True:
             question = Question(self.test, q_index)
             s = question.show_question()
+            question.end_app()
             if s[0]:
                 self.selected[q_index] = s[
                     1
                 ]  # stored selected options in form of question idx, option
                 if q_index == len(self.test.questions) - 1:
                     return True
+
                 q_index += 1
                 continue
             else:

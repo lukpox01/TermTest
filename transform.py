@@ -14,7 +14,6 @@ def txt_check(val, max_length, min_length, type_, line_num):
         sys.exit(f"Too short {type_} on line {line_num} (>{min_length})")
 
 
-# TODO implement description
 def textfile(file):
     lines = file.readlines()
     t = {

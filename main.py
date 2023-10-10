@@ -1,8 +1,7 @@
 # from curses import wrapper
-import curses
-import sys
 import dill
-from sites import LOGIN, SIGNUP, TEST
+
+from sites import TEST
 from utils import Menu, Site, find_all
 
 

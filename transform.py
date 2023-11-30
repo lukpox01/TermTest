@@ -18,6 +18,7 @@ def textfile(file):
     lines = file.readlines()
     t = {
         "autor": None,
+        "filename": None,
         "title": None,
         "questions": [],
         "time_to_complete": None,
@@ -26,7 +27,11 @@ def textfile(file):
     q = {"question": None, "options": [], "correct": None, "done": False}
     options_count = 0
     for index, line in enumerate(lines):
-        if line.startswith("@autor"):
+        if line.startswith("@name"):
+            filename = line.split(":", 1)[1].strip()
+            txt_check(filename, 64, 1, "filename", index + 1)
+            t["filename"] = filename
+        elif line.startswith("@autor"):
             autor = line.split(":", 1)[1].strip()
             txt_check(autor, 32, 3, "autor", index + 1)
             t["autor"] = autor
@@ -85,7 +90,7 @@ def textfile(file):
 
     test = Test(**t)
     with open(
-        f"{file.name[:-4]}.ttf", "wb"  # [:-4] strip out the .txt extension
+        f"{t["filename"]}.ttf", "wb"  # [:-4] strip out the .txt extension
     ) as ttf:
         dill.dump(test, ttf)
 
@@ -95,6 +100,7 @@ def ttf(file):
     with open(
         file.name[:-4] + ".txt", "w"
     ) as txt:  # [:-4] strip out the .ttf extension
+        txt.write("@name:" + test.filename + "\n")
         txt.write("@autor:" + test.autor + "\n")
         txt.write("@title:" + test.title + "\n")
         txt.write("@time:" + test.time_to_complete + "\n\n")
@@ -110,6 +116,7 @@ def ttf(file):
 
 def template(filename):
     with open(filename, "w") as txt:
+        txt.write("@name:<filename>" + "\n")
         txt.write("@autor:<autor>" + "\n")
         txt.write("@title:<title>" + "\n")
         txt.write("@time:<time in minutes>" + "\n\n")
@@ -127,8 +134,7 @@ def template(filename):
 
 
 def main(argv):
-    # file = argv[-1]
-    file = "test.txt"
+    file = argv[-1]
     if file.split(".")[-1] == "ttf":
         with open(file, "rb") as f:
             ttf(f)

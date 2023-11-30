@@ -20,26 +20,29 @@ class MainPage(Site):
         #     info = signup.get_info()
         # else:
         #     sys.exit()
-        self.stdscr.clear()
-        self.border()
-        self.show_logo()
-        menu = Menu([("LOAD TEST", 1)], self.stdscr, "EXIT")
-        menu_o = menu.display()
-
-        if menu_o[1] == 1:  # LOAD TEST
-            files = find_all("*.ttf", "tests")
+        while True:
             self.stdscr.clear()
             self.border()
             self.show_logo()
-            explorer = Menu(
-                [(file, i + 1) for i, file in enumerate(files)], self.stdscr, "BACK"
-            )
-            file = explorer.display()
-            with open(file[0], "rb") as f:
-                test = TEST(dill.load(f))
-                test.show_test()
+            menu = Menu([("LOAD TEST", 1)], self.stdscr, "EXIT")
+            menu_o = menu.display()
 
-        self.end_app()
+            if menu_o[1] == 1:  # LOAD TEST
+                files = find_all("*.ttf", "tests")
+                self.stdscr.clear()
+                self.border()
+                self.show_logo()
+                explorer = Menu(
+                    [(file, i + 1) for i, file in enumerate(files)], self.stdscr, "BACK"
+                )
+                file = explorer.display()
+                with open(file[0], "rb") as f:
+                    test = TEST(dill.load(f))
+                    test.show_test()
+            else:
+                self.end_app()
+
+
 
 
 m = MainPage()

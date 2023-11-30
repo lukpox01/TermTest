@@ -1,14 +1,14 @@
 @autor:lukas
 @title:Python
 @time:10
-@description:lol
+@description:test
 
 # What is str?
 > datatype string +
-> bullshit
+> pc
 > mobile
 
-# question
-> 25
-> 159 +
-> lol
+# 1+1?
+> 1
+> 2 +
+> 3

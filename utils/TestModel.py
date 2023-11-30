@@ -12,6 +12,7 @@ class Question:
 @dataclass
 class Test:
     autor: str
+    filename: str
     title: str
     description: str
     questions: list[Question]

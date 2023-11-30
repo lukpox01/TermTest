@@ -4,6 +4,8 @@ from curses.textpad import rectangle
 from utils import Site, Menu, count_percents
 
 
+
+
 # TODO math cleanup
 
 
@@ -28,19 +30,22 @@ class Test(Site):
 
 
 class Reluslt(Test):
-    def __init__(self, test):
+    def __init__(self, test, percents):
         super().__init__()
         self.border()
         self.test = test
+        self.percents = percents
 
     def show_results(self):
         self.show_bar(self.test)
+        self.stdscr.addstr(self.Y//2, int(self.X // 2 - len(str(self.percents))), f"{self.percents}%")
 
 
 class TEST(Test):
     def __init__(self, test):
         super().__init__()
         self.test = test
+
 
         self.border()
 
@@ -77,7 +82,8 @@ class TEST(Test):
                     self.test.questions[int(key)].correct for key in keys
                 ]
                 self.percents = count_percents(correct_answers, sorted_answers)
-                result = Reluslt()
+                result = Reluslt(self.test, self.percents)
+                result.show_results()
                 self.stdscr.getch()
 
     def manage_questions(self):

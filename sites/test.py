@@ -1,9 +1,7 @@
 import curses
 from curses.textpad import rectangle
 
-from utils import Site, Menu, count_percents
-
-
+from utils import Site, Menu, count_percents, to_str
 
 
 # TODO math cleanup
@@ -38,14 +36,15 @@ class Reluslt(Test):
 
     def show_results(self):
         self.show_bar(self.test)
-        self.stdscr.addstr(self.Y//2, int(self.X // 2 - len(str(self.percents))), f"{self.percents}%")
+        self.stdscr.addstr(
+            self.Y // 2, int(self.X // 2 - len(str(self.percents))), f"{self.percents}%"
+        )
 
 
 class TEST(Test):
     def __init__(self, test):
         super().__init__()
         self.test = test
-
 
         self.border()
 
@@ -89,7 +88,10 @@ class TEST(Test):
     def manage_questions(self):
         q_index = 0
         while True:
-            question = Question(self.test, q_index)
+            if len(self.selected) - 1 >= q_index:
+                question = Question(self.test, q_index, self.selected[q_index][1])
+            else:
+                question = Question(self.test, q_index)
             s = question.show_question()
             question.end_app()
             if s[0]:
@@ -109,7 +111,7 @@ class TEST(Test):
 
 
 class Question(Test):
-    def __init__(self, test, question, selected=None):
+    def __init__(self, test, question, selected=0):
         super().__init__()
         self.test = test
         self.q_num = question
@@ -137,20 +139,38 @@ class Question(Test):
         rectangle(self.stdscr, self.Y - 6, self.X - 14, self.Y - 3, self.X - 3)
         rectangle(self.stdscr, self.Y - 6, self.X - 27, self.Y - 3, self.X - 16)
         while True:
-            for i, o in enumerate(self.question.options):
-                if self.selected == i:
-                    self.stdscr.addstr(
-                        7 + i, 10, chr(97 + i) + ". " + o, curses.color_pair(1)
-                    )
-                else:
-                    self.stdscr.addstr(
-                        7 + i, 10, chr(97 + i) + ". " + o, curses.A_NORMAL
-                    )
+            if self.question.type == 1:
+                for i, o in enumerate(self.question.options):
+                    if self.selected == i:
+                        self.stdscr.addstr(
+                            7 + i, 10, chr(97 + i) + ". " + o, curses.color_pair(1)
+                        )
+                    else:
+                        self.stdscr.addstr(
+                            7 + i, 10, chr(97 + i) + ". " + o, curses.A_NORMAL
+                        )
+
+            elif self.question.type == 2:
+                if self.question.placeholder:
+                    self.stdscr.addstr(8, 11, self.question.placeholder)
+                    rectangle(self.stdscr, 7, 10, 9, 69)
+                    self.stdscr.getch()
+                    self.stdscr.hline(8, 11, " ", 58)
+                curses.echo()
+                curses.curs_set(1)
+                self.selected = to_str(self.stdscr.getstr(8, 11, 58))
+                curses.noecho()
+                curses.curs_set(0)
+                rectangle(self.stdscr, 7, 10, 9, 69)
+
             option_ch = self.stdscr.getch()
 
             if option_ch == 10 and self.selected is not None:
                 self.question.done = True
-                return True, self.selected + 1
+                if self.question.type == 1:
+                    return True, self.selected + 1
+                elif self.question.type == 2:
+                    return True, self.selected
 
             elif option_ch == 107 or option_ch == 261:  # next
                 if self.q_num == questions_idx:

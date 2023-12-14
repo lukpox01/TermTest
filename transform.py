@@ -2,7 +2,7 @@ import sys
 
 import dill
 
-from utils import Test, Question
+from utils import Test, OptionsQuestion, EntryQuestion
 
 
 def txt_check(val, max_length, min_length, type_, line_num):
@@ -24,7 +24,14 @@ def textfile(file):
         "time_to_complete": None,
         "description": "",
     }
-    q = {"question": None, "options": [], "correct": None, "done": False}
+    q = {
+        "question": "",
+        "options": [],
+        "correct": -1,
+        "done": False,
+        "type": -1,
+        "placeholder": "",
+    }
     options_count = 0
     for index, line in enumerate(lines):
         if line.startswith("@name"):
@@ -58,9 +65,19 @@ def textfile(file):
 
             t["time_to_complete"] = time
         elif line.startswith("#"):
-            if options_count != 0 and options_count != 1:
-                t["questions"].append(Question(**q))
-                q = {"question": None, "options": [], "correct": None, "done": False}
+            if (options_count != 0 and options_count != 1) or q["type"] == 2:
+                if q["type"] == 1:
+                    t["questions"].append(OptionsQuestion(**q))
+                elif q["type"] == 2:
+                    t["questions"].append(EntryQuestion(**q))
+                q = {
+                    "question": "",
+                    "options": [],
+                    "correct": -1,
+                    "done": False,
+                    "type": -1,
+                    "placeholder": "",
+                }
             elif options_count > 5:
                 sys.exit(f"Too many options in {q['question']}")
             elif options_count != 0 and options_count <= 1:
@@ -73,6 +90,9 @@ def textfile(file):
             q["question"] = line.split("#")[1].strip()
 
         elif line.startswith(">"):
+            q["type"] = 1
+            if q.get("placeholder") is not None:
+                q.pop("placeholder")
             option = line.split(">", 1)[1].replace("+", "").strip()
             txt_check(option, 128, 1, "option", index + 1)
 
@@ -80,9 +100,23 @@ def textfile(file):
             if line.strip().endswith("+"):
                 q["correct"] = options_count
             q["options"].append(option)
+        elif line.startswith("+"):
+            q["type"] = 2
+            if q.get("options") is not None:
+                q.pop("options")
+            entry = line.split("+", 1)[1].replace("+", "").strip()
+            txt_check(entry, 58, 1, "entry", index + 1)
 
-    if options_count != 0 and options_count != 1:
-        t["questions"].append(Question(**q))
+            if line.strip().endswith("+"):
+                q["correct"] = entry
+            else:
+                q["placeholder"] = entry
+
+    if (options_count != 0 and options_count != 1) or q["type"] == 2:
+        if q["type"] == 1:
+            t["questions"].append(OptionsQuestion(**q))
+        elif q["type"] == 2:
+            t["questions"].append(EntryQuestion(**q))
     elif options_count > 5:
         sys.exit(f"Too many options in {q['question']}")
     elif options_count != 0 and options_count <= 1:
@@ -90,7 +124,7 @@ def textfile(file):
 
     test = Test(**t)
     with open(
-        f"{t["filename"]}.ttf", "wb"  # [:-4] strip out the .txt extension
+        f"{t['filename']}.ttf", "wb"  # [:-4] strip out the .txt extension
     ) as ttf:
         dill.dump(test, ttf)
 
@@ -106,11 +140,15 @@ def ttf(file):
         txt.write("@time:" + test.time_to_complete + "\n\n")
         for question in test.questions:
             txt.write("# " + question.question + "\n")
-            for i, option in enumerate(question.options):
-                if i + 1 == question.correct:
-                    txt.write("> " + option + " +" + "\n")
-                else:
-                    txt.write("> " + option + "\n")
+            if question.type == 1:
+                for i, option in enumerate(question.options):
+                    if i + 1 == question.correct:
+                        txt.write("> " + option + " +" + "\n")
+                    else:
+                        txt.write("> " + option + "\n")
+            elif question.type == 2:
+                txt.write(f"+ {question.placeholder}" + "\n")
+                txt.write(f"+ {question.correct} +" + "\n")
             txt.write("\n")
 
 
@@ -130,6 +168,16 @@ def template(filename):
                     )
                 else:
                     txt.write(f"> <option{j+1} for question{i+1}>" + "\n")
+            txt.write("\n")
+
+        txt.write("\n")
+        for i in range(2, 4):
+            txt.write(f"# <question{i+1}>" + "\n")
+            txt.write("+ <entry placeholder def-'type here'>" + "\n")
+            txt.write(
+                "+ <correct answer> <'+' for mark it, otherwise placeholder>" + "\n"
+            )
+
             txt.write("\n")
 
 

@@ -1,7 +1,9 @@
 # from curses import wrapper
+import sys
+
 import dill
 
-from sites import TEST
+from sites import TEST, LOGIN, SIGNUP
 from utils import Menu, Site, find_all
 
 
@@ -9,17 +11,23 @@ class MainPage(Site):
     def main(self):
         self.show_logo()
 
-        menu = Menu([("LOGIN", 1), ("SIGNUP", 2)], self.stdscr, "EXIT")
+        menu = Menu([("DEV", 3), ("LOGIN", 1), ("SIGNUP", 2)], self.stdscr, "EXIT")
         auth = menu.display()
 
-        # if auth[1] == 1:  # LOGIN
-        #     login = LOGIN()
-        #     info = login.get_info()
-        # elif auth[1] == 2:  # SIGNUP
-        #     signup = SIGNUP()
-        #     info = signup.get_info()
-        # else:
-        #     sys.exit()
+        if auth[1] == 1:  # LOGIN
+            login = LOGIN()
+            info = login.get_info()
+
+        elif auth[1] == 2:  # SIGNUP
+            signup = SIGNUP()
+            info = signup.get_info()
+
+        elif auth[1] == 3:  # dev
+            info
+
+        else:
+            sys.exit()
+
         while True:
             self.stdscr.clear()
             self.border()
@@ -40,9 +48,8 @@ class MainPage(Site):
                     test = TEST(dill.load(f))
                     test.show_test()
             else:
-                self.end_app()
-
-
+                break
+        self.end_app()
 
 
 m = MainPage()
